@@ -23,13 +23,13 @@ import java.time.Duration
 @Testcontainers
 class MessageListenerTest{
     companion object {
-
         @Container
         var localStack = LocalStackContainer(DockerImageName.parse("localstack/localstack:2.2"))
                 .withClasspathResourceMapping("/localstack", "/etc/localstack", BindMode.READ_ONLY)
                 .withServices(LocalStackContainer.Service.SQS)
                 .waitingFor(Wait.forLogMessage(".*Initialized\\.\n", 1))
 
+        // localstack does not support @ServiceConnection yet, so properties need to be dynamically registered
         @JvmStatic
         @DynamicPropertySource
         fun registerProperties(registry: DynamicPropertyRegistry) {
